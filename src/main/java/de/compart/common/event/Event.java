@@ -7,9 +7,9 @@ package de.compart.common.event;
  * Time: 20:46
  *
  */
-public interface Event {
+public interface Event<T> {
 
-	public enum EventType {
+	enum EventType {
 		/**
 		 * an information
 		 */
@@ -34,10 +34,10 @@ public interface Event {
 		EXIT
 	}
 
-	public EventType getType();
+	EventType getType();
 
-	public Object getSource();
+	Object getSource();
 
-	public String getMessage();
+	T getMessage();
 
 }

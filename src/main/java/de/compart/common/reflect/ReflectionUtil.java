@@ -100,6 +100,9 @@ public class ReflectionUtil {
 
 	//===============================  VARIABLES ====================================//
 	//==============================  CONSTRUCTORS ==================================//
+	protected ReflectionUtil() {
+		throw new IllegalStateException( "This utility class should not be instantiated, or you have a good reason for it." );
+	}
 	//=============================  PUBLIC METHODS =================================//
 	//======================  PROTECTED/PACKAGE METHODS =============================//
 	//============================  PRIVATE METHODS =================================//

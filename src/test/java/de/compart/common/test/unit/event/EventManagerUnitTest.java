@@ -24,12 +24,12 @@ public class EventManagerUnitTest {
 	//==============================  CONSTRUCTORS ==================================//
 	//=============================  PUBLIC METHODS =================================//
 
-	@Test( expected = NullPointerException.class )
+	@Test( expected = IllegalArgumentException.class )
 	public void assertNPE() {
 		new EventManager( null );
 	}
 
-	@Test( expected = NullPointerException.class )
+	@Test( expected = IllegalArgumentException.class )
 	public void assertNPEForListener() {
 		new EventManager( this ).registerListener( null );
 	}

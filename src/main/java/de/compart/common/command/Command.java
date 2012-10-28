@@ -2,19 +2,19 @@ package de.compart.common.command;
 
 public interface Command {
 
-	public void execute() throws CommandExecutionException;
+	void execute() throws ExecutionException;
 
-	public static class CommandExecutionException extends RuntimeException {
+	class ExecutionException extends RuntimeException {
 
-		public CommandExecutionException( Throwable inputEx ) {
+		public ExecutionException( Throwable inputEx ) {
 			super( inputEx );
 		}
 
-		public CommandExecutionException( String inputMessage, Throwable inputEx ) {
+		public ExecutionException( String inputMessage, Throwable inputEx ) {
 			super( inputMessage, inputEx );
 		}
 
-		public CommandExecutionException( final String inputMessage ) {
+		public ExecutionException( final String inputMessage ) {
 			super( inputMessage );
 		}
 

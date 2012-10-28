@@ -1,11 +1,12 @@
 package de.compart.common.observer;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 public class Observable<T> {
 
-	private final Set<Observer<T>> observers = new HashSet<Observer<T>>();
+	private final Set<Observer<T>> observers = Collections.newSetFromMap(new WeakHashMap<Observer<T>, Boolean>());
 
 	protected void notifyObservers( T obj ) {
 		for ( Observer<T> observer : observers ) {

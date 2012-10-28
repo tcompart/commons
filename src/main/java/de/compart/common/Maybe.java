@@ -1,5 +1,7 @@
 package de.compart.common;
 
+import org.slf4j.Logger;
+
 /**
  *
  * User: torsten
@@ -9,11 +11,11 @@ package de.compart.common;
  */
 public class Maybe<T> {
 
-	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger( Maybe.class );
+	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger( Maybe.class );
 	private final T obj;
 
 	protected Maybe( final T inputObj ) {
-		log.debug( "Initialized default instance: {} (Object: {})", Maybe.class.getSimpleName(), ( inputObj != null ? inputObj.toString() : "not initialized" ) );
+		LOG.debug( "Initialized default instance: {} (Object: {})", Maybe.class.getSimpleName(), ( inputObj != null ? inputObj.toString() : "not initialized" ) );
 		this.obj = inputObj;
 	}
 
@@ -39,13 +41,14 @@ public class Maybe<T> {
 
 	@Override
 	public boolean equals( final Object o ) {
-		if ( this == o ) return true;
-		if ( o == null || getClass() != o.getClass() ) return false;
-
-		final Maybe maybe = ( Maybe ) o;
-
-		return !( obj != null ? !obj.equals( maybe.obj ) : maybe.obj != null );
-
+		if ( this == o ) {
+			return true;
+		} else if ( o == null || getClass() != o.getClass() ) {
+			return false;
+		} else {
+			final Maybe maybe = ( Maybe ) o;
+			return !( obj != null ? !obj.equals( maybe.obj ) : maybe.obj != null );
+		}
 	}
 
 	@Override

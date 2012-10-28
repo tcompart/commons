@@ -13,5 +13,5 @@ public interface EventListener {
 	 * implement this method to listen for incoming events
 	 * @param event - a non value implementation of interface {@link Event}
 	 */
-	void listen( Event event );
+	void listen( final Event event );
 }

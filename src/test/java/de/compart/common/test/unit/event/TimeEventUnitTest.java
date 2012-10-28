@@ -24,19 +24,19 @@ public class TimeEventUnitTest {
 
 	@Test
 	public void correctEventType() {
-		final Event event = new TimeEvent( this, System.currentTimeMillis() );
+		final Event event = new TimeEvent( this );
 		assertThat( event.getType(), is( Event.EventType.TIME ) );
 	}
 
 	@Test
 	public void nonNullEventMessage() {
-		final Event event = new TimeEvent( this, System.currentTimeMillis() );
+		final Event event = new TimeEvent( this );
 		assertThat( event.getMessage(), notNullValue() );
 	}
 
 	@Test
 	public void correctEventSource() {
-		final Event event = new TimeEvent( this, System.currentTimeMillis() );
+		final Event event = new TimeEvent( this );
 		assertThat( event.getSource(), is( ( Object ) this ) );
 	}
 

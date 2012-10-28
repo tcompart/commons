@@ -7,13 +7,17 @@ package de.compart.common.event;
  * Time: 20:46
  *
  */
-public class TimeEvent implements Event {
+public class TimeEvent implements Event<Long> {
 	//============================== CLASS VARIABLES ================================//
 	//===============================  VARIABLES ====================================//
 	private final Object source;
 	private final long startTime;
 
 	//==============================  CONSTRUCTORS ==================================//
+	public TimeEvent( final Object inputSource ) {
+		this( inputSource, System.nanoTime() );
+	}
+
 	public TimeEvent( final Object inputSource, final long startTime ) {
 		this.source = inputSource;
 		this.startTime = startTime;
@@ -31,8 +35,8 @@ public class TimeEvent implements Event {
 	}
 
 	@Override
-	public String getMessage() {
-		return String.format( "%d", System.nanoTime() - startTime );
+	public Long getMessage() {
+		return System.nanoTime() - startTime;
 	}
 
 	//======================  PROTECTED/PACKAGE METHODS =============================//

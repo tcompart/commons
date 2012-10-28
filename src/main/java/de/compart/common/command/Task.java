@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Task extends Observable {
 
-	private static final Logger log = LoggerFactory.getLogger( Task.class );
+	private static final Logger LOG = LoggerFactory.getLogger( Task.class );
 
-	private static final AtomicLong atomicNumber = new AtomicLong( 0 );
+	private static final AtomicLong TASK_UNIQUE_NUMBER = new AtomicLong( 0 );
 
 	private boolean finished;
 	private boolean successful;
@@ -24,36 +24,34 @@ public class Task extends Observable {
 
 	private final Command command;
 
-	public Task( Command inputCommand ) {
+	public Task( final Command inputCommand ) {
 		this.finished = false;
 		this.successful = false;
-		this.taskNumber = atomicNumber.incrementAndGet();
+		this.taskNumber = TASK_UNIQUE_NUMBER.incrementAndGet();
 		this.command = inputCommand;
-		log.info( String.format( "Initializing [%s_%d]", Task.class.getSimpleName(), this.taskNumber ) );
+		LOG.info( String.format( "Initializing [%s_%d]", Task.class.getSimpleName(), this.taskNumber ) );
 	}
 
 	public String getUniqueIdentifier() {
 		return String.valueOf( this.taskNumber );
 	}
 
-	public void doTask() throws IllegalStateException {
+	public void doTask() {
 
 		if ( this.command == null ) {
-			log.error( String.format(
-											"[%s_%d]: not correctly initialized without an command to be executed.",
+			LOG.error( String.format( "[%s_%d]: not correctly initialized without an command to be executed.",
 											Task.class.getSimpleName(), this.taskNumber ) );
 			throw new IllegalStateException();
 		}
 
 		try {
-			if ( log.isInfoEnabled() ) {
-				log.info( String.format( "[%s_%d]: executing command.", Task.class.getSimpleName(), this.taskNumber ) );
+			if ( LOG.isInfoEnabled() ) {
+				LOG.info( String.format( "[%s_%d]: executing command.", Task.class.getSimpleName(), this.taskNumber ) );
 			}
 			this.command.execute();
 			this.successful = true;
-		} catch ( Command.CommandExecutionException ex ) {
-			throw new RuntimeException( String.format(
-															 "[%s_%d]: failed command execution.", Task.class.getSimpleName(), this.taskNumber ), ex );
+		} catch ( Command.ExecutionException ex ) {
+			throw new Command.ExecutionException( String.format( "[%s_%d]: failed command execution.", Task.class.getSimpleName(), this.taskNumber ), ex );
 		}
 
 		this.finished = true;

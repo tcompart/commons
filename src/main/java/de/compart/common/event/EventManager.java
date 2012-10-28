@@ -2,6 +2,7 @@ package de.compart.common.event;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -14,13 +15,13 @@ import java.util.Set;
 public class EventManager {
 	//=============================== CLASS METHODS =================================//
 	public static boolean registerObservable( final Object observable ) {
-		observableMap.put( observable, new LinkedHashSet<EventListener>() );
-		return observableMap.containsKey( observable );
+		OBSERVABLE_MAP.put( observable, new LinkedHashSet<EventListener>() );
+		return OBSERVABLE_MAP.containsKey( observable );
 	}
 
 	//============================== CLASS VARIABLES ================================//
-	private static final HashMap<Object, Set<EventListener>> observableMap = new HashMap<Object, Set<EventListener>>();
-	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger( EventManager.class );
+	private static final Map<Object, Set<EventListener>> OBSERVABLE_MAP = new HashMap<Object, Set<EventListener>>();
+	private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger( EventManager.class );
 
 	//===============================  VARIABLES ====================================//
 	private final Object target;
@@ -28,7 +29,8 @@ public class EventManager {
 	//==============================  CONSTRUCTORS ==================================//
 	public EventManager( final Object target ) {
 		if ( target == null ) {
-			throw new NullPointerException();
+			// fix regarding the rule of sonar: avoiding NPEs
+			throw new IllegalArgumentException("The event manager event instance was initialized with a null value assigned.");
 		}
 		registerObservable( target );
 		this.target = target;
@@ -36,23 +38,23 @@ public class EventManager {
 
 	//=============================  PUBLIC METHODS =================================//
 	public boolean registerListener( final EventListener listener ) {
-		if ( listener == null ) {
-			throw new NullPointerException();
+		if (listener == null) {
+			throw new IllegalArgumentException("The listener is not initalized, and therefore not usable for this context.");
 		}
-		log.info( "Adding listener '{}' to object '{}'.", listener, target );
-		return observableMap.get( target ).add( listener );
+		LOG.info( "Adding listener '{}' to object '{}'.", listener, target );
+		return OBSERVABLE_MAP.get( target ).add( listener );
 	}
 
 	public boolean notifyListener( final Event event ) {
-		log.info( "Notifying listener list about event '{}' of object '{}'", event, target );
-		for ( EventListener listener : observableMap.get( target ) ) {
+		LOG.info( "Notifying listener list about event '{}' of object '{}'", event, target );
+		for ( EventListener listener : OBSERVABLE_MAP.get( target ) ) {
 			listener.listen( event );
 		}
-		return !observableMap.get( target ).isEmpty();
+		return !OBSERVABLE_MAP.get( target ).isEmpty();
 	}
 
 	public Set<EventListener> getListener() {
-		return observableMap.get( target );
+		return OBSERVABLE_MAP.get( target );
 	}
 
 	//======================  PROTECTED/PACKAGE METHODS =============================//
