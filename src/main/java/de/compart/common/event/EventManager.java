@@ -30,7 +30,7 @@ public class EventManager {
 	public EventManager( final Object target ) {
 		if ( target == null ) {
 			// fix regarding the rule of sonar: avoiding NPEs
-			throw new IllegalArgumentException("The event manager event instance was initialized with a null value assigned.");
+			throw new IllegalArgumentException( "The event manager event instance was initialized with a null value assigned." );
 		}
 		registerObservable( target );
 		this.target = target;
@@ -38,15 +38,19 @@ public class EventManager {
 
 	//=============================  PUBLIC METHODS =================================//
 	public boolean registerListener( final EventListener listener ) {
-		if (listener == null) {
-			throw new IllegalArgumentException("The listener is not initalized, and therefore not usable for this context.");
+		if ( listener == null ) {
+			throw new IllegalArgumentException( "The listener is not initalized, and therefore not usable for this context." );
 		}
 		LOG.info( "Adding listener '{}' to object '{}'.", listener, target );
 		return OBSERVABLE_MAP.get( target ).add( listener );
 	}
 
 	public boolean notifyListener( final Event event ) {
-		LOG.info( "Notifying listener list about event '{}' of object '{}'", event, target );
+		if ( event != null ) {
+			LOG.info( "Notifying listener list about event '{}' from object '{}'", event, target );
+		} else {
+			LOG.warn( "Listener will receive a null value event from object '{}'", target );
+		}
 		for ( EventListener listener : OBSERVABLE_MAP.get( target ) ) {
 			listener.listen( event );
 		}

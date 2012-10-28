@@ -43,11 +43,17 @@ public class Maybe<T> {
 	public boolean equals( final Object o ) {
 		if ( this == o ) {
 			return true;
-		} else if ( o == null || getClass() != o.getClass() ) {
+		} else if ( o == null ) {
 			return false;
 		} else {
-			final Maybe maybe = ( Maybe ) o;
-			return !( obj != null ? !obj.equals( maybe.obj ) : maybe.obj != null );
+			final Object that;
+			if ( o instanceof Maybe ) {
+				final Maybe maybe = ( Maybe ) o;
+				that = maybe.get();
+			} else {
+				that = o;
+			}
+			return !( obj != null ? !obj.equals( that ) : that != null );
 		}
 	}
 

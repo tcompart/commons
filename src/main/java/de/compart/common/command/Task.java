@@ -1,12 +1,12 @@
 package de.compart.common.command;
 
+import de.compart.common.observer.Observable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Observable;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Task extends Observable {
+public class Task extends Observable<Command> {
 
 	private static final Logger LOG = LoggerFactory.getLogger( Task.class );
 
@@ -56,6 +56,24 @@ public class Task extends Observable {
 
 		this.finished = true;
 
+	}
+
+	@Override
+	public boolean equals( final Object o ) {
+		if ( this == o ) return true;
+		if ( o == null || getClass() != o.getClass() ) return false;
+
+		final Task task = ( Task ) o;
+		return finished == task.finished && successful == task.successful && taskNumber == task.taskNumber && !( command != null ? !command.equals( task.command ) : task.command != null );
+	}
+
+	@Override
+	public int hashCode() {
+		int result = ( finished ? 1 : 0 );
+		result = 31 * result + ( successful ? 1 : 0 );
+		result = 31 * result + ( int ) ( taskNumber ^ ( taskNumber >>> 32 ) );
+		result = 31 * result + ( command != null ? command.hashCode() : 0 );
+		return result;
 	}
 
 	public boolean successful() {

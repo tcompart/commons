@@ -7,6 +7,7 @@
 	<groupId>de.compart</groupId>
 	<artifactId>common</artifactId>
 	<version>0.0.2</version>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -49,8 +50,6 @@
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPath>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPath>
-		<sonar.surefire.reportsPath>../${project.artifactId}.tests/target/surefire-reports/</sonar.surefire.reportsPath>
-		<sonar.skippedModules>plugin.tests</sonar.skippedModules>
-
+		<sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
 	</properties>
 </project>

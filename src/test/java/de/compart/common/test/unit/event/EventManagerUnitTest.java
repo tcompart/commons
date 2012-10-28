@@ -45,11 +45,30 @@ public class EventManagerUnitTest {
 		EventListener listener = new EventListener() {
 			@Override
 			public void listen( final Event event ) {
-
+			 	// nothing to do here
 			}
 		};
 		eventManager.registerListener( listener );
 		assertThat( eventManager.getListener(), hasItems( listener ) );
+	}
+
+	@Test
+	public void ifNoListenerWasAssignedNotifiyingReturnsFalse() {
+		EventManager eventManager = new EventManager(this);
+		assertThat(eventManager.notifyListener(null), is(false));
+	}
+
+	@Test
+	public void observerShouldNotListenToNullEvents() {
+		EventManager eventManager = new EventManager(this);
+		EventListener listener = new EventListener() {
+			@Override
+			public void listen( final Event event ) {
+				assertThat(event, nullValue());
+			}
+		};
+		eventManager.registerListener(listener);
+		assertThat(eventManager.notifyListener( null ), is(true));
 	}
 
 	@Test
