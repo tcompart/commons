@@ -14,11 +14,8 @@ import java.util.Map;
  *
  */
 public class ReflectionUtil {
-
-
 	//============================== CLASS VARIABLES ================================//
 	//=============================== CLASS METHODS =================================//
-
 	/**
 	 * Get the actual type arguments a child class has used to extend a generic base class.
 	 *
@@ -73,7 +70,6 @@ public class ReflectionUtil {
 		return typeArgumentsAsClasses;
 	}
 
-
 	/**
 	 * Get the underlying class for a type, or null if the type is a variable type.
 	 * @param type the type
@@ -96,7 +92,6 @@ public class ReflectionUtil {
 			return null;
 		}
 	}
-
 
 	//===============================  VARIABLES ====================================//
 	//==============================  CONSTRUCTORS ==================================//

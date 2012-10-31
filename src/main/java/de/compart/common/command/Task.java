@@ -10,9 +10,13 @@ public class Task extends Observable<Command> {
 
 	private static final Logger LOG = LoggerFactory.getLogger( Task.class );
 
+	private static final int PRIME = 31;
+	private static final int INT_SHIFT_BIT_LENGTH = 32;
+
 	private static final AtomicLong TASK_UNIQUE_NUMBER = new AtomicLong( 0 );
 
 	private boolean finished;
+
 	private boolean successful;
 
 	/*
@@ -21,8 +25,7 @@ public class Task extends Observable<Command> {
 	 * more bytes are needed, and we speak only about an identifier
 	 */
 	private final long taskNumber;
-
-	private final Command command;
+	private Command command;
 
 	public Task( final Command inputCommand ) {
 		this.finished = false;
@@ -30,6 +33,14 @@ public class Task extends Observable<Command> {
 		this.taskNumber = TASK_UNIQUE_NUMBER.incrementAndGet();
 		this.command = inputCommand;
 		LOG.info( String.format( "Initializing [%s_%d]", Task.class.getSimpleName(), this.taskNumber ) );
+	}
+
+	protected Task( final Task inputTask ) {
+		this.finished = inputTask.finished;
+		this.successful = inputTask.successful;
+		this.taskNumber = inputTask.taskNumber;
+		this.command = inputTask.command;
+		LOG.info( String.format( "Initializing a copy of [%s_%d]", Task.class.getSimpleName(), this.taskNumber ) );
 	}
 
 	public String getUniqueIdentifier() {
@@ -45,34 +56,37 @@ public class Task extends Observable<Command> {
 		}
 
 		try {
-			if ( LOG.isInfoEnabled() ) {
-				LOG.info( String.format( "[%s_%d]: executing command.", Task.class.getSimpleName(), this.taskNumber ) );
-			}
+			LOG.info( String.format( "[%s_%d]: executing command.", Task.class.getSimpleName(), this.taskNumber ) );
 			this.command.execute();
 			this.successful = true;
-		} catch ( Command.ExecutionException ex ) {
+		} catch ( final RuntimeException ex ) {
 			throw new Command.ExecutionException( String.format( "[%s_%d]: failed command execution.", Task.class.getSimpleName(), this.taskNumber ), ex );
+		} finally {
+			this.finished = true;
 		}
-
-		this.finished = true;
 
 	}
 
 	@Override
 	public boolean equals( final Object o ) {
-		if ( this == o ) return true;
-		if ( o == null || getClass() != o.getClass() ) return false;
-
-		final Task task = ( Task ) o;
-		return finished == task.finished && successful == task.successful && taskNumber == task.taskNumber && !( command != null ? !command.equals( task.command ) : task.command != null );
+		if ( this == o ) {
+			return true;
+		} else if ( o == null ) {
+			return false;
+		} else if ( !( o instanceof Task ) ) {
+			return false;
+		} else {
+			final Task task = ( Task ) o;
+			return finished == task.finished && successful == task.successful && ( command == null ? task.command == null : command.equals( task.command ) ) && taskNumber == task.taskNumber;
+		}
 	}
 
 	@Override
 	public int hashCode() {
 		int result = ( finished ? 1 : 0 );
-		result = 31 * result + ( successful ? 1 : 0 );
-		result = 31 * result + ( int ) ( taskNumber ^ ( taskNumber >>> 32 ) );
-		result = 31 * result + ( command != null ? command.hashCode() : 0 );
+		result = PRIME * result + ( successful ? 1 : 0 );
+		result = PRIME * result + ( int ) ( taskNumber ^ ( taskNumber >>> INT_SHIFT_BIT_LENGTH ) );
+		result = PRIME * result + ( command != null ? command.hashCode() : 0 );
 		return result;
 	}
 
@@ -82,6 +96,10 @@ public class Task extends Observable<Command> {
 
 	public boolean finished() {
 		return this.finished;
+	}
+
+	protected void setCommand( final Command inputCommand ) {
+		this.command = inputCommand;
 	}
 
 }
