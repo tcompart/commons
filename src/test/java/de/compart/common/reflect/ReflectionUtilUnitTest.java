@@ -84,8 +84,8 @@ public class ReflectionUtilUnitTest {
 
 	@Test
 	public void getClassParametrizedTypeValueResultsClassValue() {
-		ParameterizedType type = ParameterizedTypeImpl.make(String.class, new Type[]{}, ReflectionUtilUnitTest.class);
-		assertThat( ReflectionUtil.getClass( type ) ).isEqualTo( type );
+		ParameterizedType type = ParameterizedTypeImpl.make(String.class, new Type[]{}, Object.class);
+		assertThat( ReflectionUtil.getClass( type ) ).isEqualTo( String.class );
 	}
 
 	static class ConcreteUserType extends AbstractUserType<String> {
