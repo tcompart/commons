@@ -6,7 +6,7 @@
 
 	<groupId>de.compart</groupId>
 	<artifactId>common</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.2-rc1</version>
 
 	<dependencies>
 		<dependency>
